@@ -1,0 +1,22 @@
+{
+  "name": "learntypescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rupamswain1/learnTypeScript.git"
+  },
+  "author": "rupam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rupamswain1/learnTypeScript/issues"
+  },
+  "homepage": "https://github.com/rupamswain1/learnTypeScript#readme",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
