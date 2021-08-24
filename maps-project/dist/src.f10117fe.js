@@ -136891,7 +136891,13 @@ var User = function () {
       lat: parseFloat(faker_1.default.address.latitude()),
       lng: parseFloat(faker_1.default.address.longitude())
     };
+
+    color: "red";
   }
+
+  User.prototype.markerContent = function () {
+    return "Person Name: " + this.name;
+  };
 
   return User;
 }();
@@ -136921,7 +136927,14 @@ var Company = function () {
       lat: parseFloat(faker_1.default.address.latitude()),
       lng: parseFloat(faker_1.default.address.longitude())
     };
+    this.color = "green";
   }
+
+  ;
+
+  Company.prototype.markerContent = function () {
+    return "\n            <div>\n                <h1>Company Name: " + this.companyName + "</h1>\n                <h3>Catch Phrase: " + this.catchPhrose + "</h3>\n            </div>\n        ";
+  };
 
   return Company;
 }();
@@ -136958,7 +136971,7 @@ var CustomMap = function () {
     });
     marker.addListener('click', function () {
       var infoWindow = new google.maps.InfoWindow({
-        content: 'Welcome'
+        content: mappable.markerContent()
       });
       infoWindow.open(_this.googleMap, marker);
     });
@@ -137016,7 +137029,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35557" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33451" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

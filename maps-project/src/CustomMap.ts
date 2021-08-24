@@ -4,11 +4,13 @@ import { Company } from './Company';
 
 //whichever class is passed to CustomMap for adding marker, should have location obj with lattitude
 
-interface Mappable{
+export interface Mappable{
     location:{
         lat:number,
         lng:number
     };
+    markerContent():string;
+    color:string;
 }
 export class CustomMap{
     
@@ -35,9 +37,9 @@ export class CustomMap{
 
         marker.addListener('click',()=>{
             const infoWindow=new google.maps.InfoWindow({
-                content:'Welcome'
+                content:mappable.markerContent(),
             });
-            infoWindow.open(this.googleMap,marker)
+            infoWindow.open(this.googleMap,marker) 
         })
     }
 
