@@ -28,10 +28,20 @@ const prinBike=(bike:Vehicle)=>{
     is it an Adv? ${bike.isAdv}!!!1`)
     console.log(bike.summary())
 }
-
+// without interface the function would be as below:
+const printBikeWithoutInterface=(bike:{brand:string;model:string;yearOfManufacture:number;isAdv:boolean;summary:()=>string})=>{
+    console.log(`${bike.brand} launched a new bike 
+    with model name ${bike.model} 
+    manufactutred in ${bike.yearOfManufacture} 
+    is it an Adv? ${bike.isAdv}!!!1`)
+    console.log(bike.summary())
+}
 const reportBike=(item:Reportable)=>{
     console.log('Reporter Reporting>>>',item.summary())
 }
 
 prinBike(advBike);
 reportBike(advBike);
+
+console.log('without Interface function print-------->');
+printBikeWithoutInterface(advBike)
