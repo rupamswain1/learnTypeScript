@@ -4,7 +4,8 @@ interface Mappable{
     location:{
         lat:number,
         lng:number
-    }
+    };
+    marker():string
 }
 
 export class CustomMap{
@@ -21,12 +22,19 @@ export class CustomMap{
     }
    
     addMarker(mappable:Mappable){
-        new google.maps.Marker({
+        const marker=new google.maps.Marker({
             map:this.googlemap,
             position:{
                 lat:mappable.location.lat,
                 lng:mappable.location.lng
             }
+        })
+
+        marker.addListener('click',()=>{
+            const infoWindow=new google.maps.InfoWindow({
+                content:mappable.marker()
+            });
+            infoWindow.open(this.googlemap,marker)
         })
     }
    

@@ -136895,6 +136895,10 @@ function () {
     };
   }
 
+  Users.prototype.marker = function () {
+    return "\n                <div>\n                    <h1>Name:" + this.name + "</h1>\n                </div>\n            ";
+  };
+
   return Users;
 }();
 
@@ -136921,11 +136925,15 @@ function () {
   function Company() {
     this.companyName = faker_1.default.company.companyName();
     this.companyCatchPhrase = faker_1.default.company.catchPhrase();
-    this.companylocation = {
+    this.location = {
       lat: parseFloat(faker_1.default.address.latitude()),
       lng: parseFloat(faker_1.default.address.longitude())
     };
   }
+
+  Company.prototype.marker = function () {
+    return "<div>\n                <h1>Company name: " + this.companyName + "</h1>\n                <h2>Catch phrase: " + this.companyCatchPhrase + "</h2>\n             </div>\n            ";
+  };
 
   return Company;
 }();
@@ -136953,12 +136961,20 @@ function () {
   }
 
   CustomMap.prototype.addMarker = function (mappable) {
-    new google.maps.Marker({
+    var _this = this;
+
+    var marker = new google.maps.Marker({
       map: this.googlemap,
       position: {
         lat: mappable.location.lat,
         lng: mappable.location.lng
       }
+    });
+    marker.addListener('click', function () {
+      var infoWindow = new google.maps.InfoWindow({
+        content: mappable.marker()
+      });
+      infoWindow.open(_this.googlemap, marker);
     });
   };
 
@@ -136983,6 +136999,7 @@ var user = new Users_1.Users();
 var company = new Company_1.Company();
 var customMap = new CustomMap_1.CustomMap('map');
 customMap.addMarker(user);
+customMap.addMarker(company);
 },{"./Users":"src/Users.ts","./Company":"src/Company.ts","./CustomMap":"src/CustomMap.ts"}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -137011,7 +137028,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45635" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39331" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

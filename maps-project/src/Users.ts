@@ -15,4 +15,13 @@ export class Users{
 
         }
     }
+    marker():string{
+        return(
+            `
+                <div>
+                    <h1>Name:${this.name}</h1>
+                </div>
+            `
+        )
+    }
 }
