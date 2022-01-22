@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:build": "tsc -w",
+    "start:run": "nodemon sortProject/build/index.js",
+    "start": "concurrently npm:start:*"
   },
   "repository": {
     "type": "git",
@@ -20,7 +22,10 @@
     "@types/faker": "^5.5.8",
     "@types/google.maps": "^3.45.6",
     "axios": "^0.21.4",
-    "faker": "^5.5.3"
+    "concurrent": "^0.3.2",
+    "concurrently": "^7.0.0",
+    "faker": "^5.5.3",
+    "nodemon": "^2.0.15"
   },
   "devDependencies": {
     "typescript": "^4.3.5"
