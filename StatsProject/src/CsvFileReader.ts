@@ -1,11 +1,10 @@
 import fs from 'fs';
-import { MatchResults } from './MatchResultTypes';
-import {dateStringToDate} from './Utils';
 
-type MatchTypeTuple=[Date,string,string,number,number,MatchResults,string];
-export class CSVFileReader{
-    data:MatchTypeTuple[]=[];
+export abstract class CSVFileReader<T>{
+    data:T[]=[];
     constructor(public filename:string){}
+
+    abstract matchRow(row:string[]):T;
 
     read():void{
         this.data=fs.readFileSync(this.filename,{
@@ -15,18 +14,6 @@ export class CSVFileReader{
         .map((row:string):string[]=>{
             return row.split(',');
         })
-        .map((row:string[]):MatchTypeTuple=>{
-            return [
-                dateStringToDate(row[0]),
-                row[1],
-                row[2],
-                parseInt(row[3]),
-                parseInt(row[4]),
-                row[5] as MatchResults,
-                row[6]
-
-            ];
-        });
-        
+        .map(this.matchRow)
     }
 }
