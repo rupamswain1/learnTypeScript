@@ -1,20 +1,28 @@
-import { CSVFileReader } from "./CsvFileReader";
-import { dateStringToDate } from "./Utils";
-import { MatchResults } from "./MatchResultTypes";
+import {MatchResults} from './MatchResultTypes';
+import {dateStringToDate} from './Utils';
+import {MatchTypeTuple} from './MatchType';
+interface DataReader{
+    read():void;
+    data:string[][];
+}
 
-type MatchTypeTuple=[Date,string,string,number,number,MatchResults,string];
 
-export class MatchReader extends CSVFileReader<MatchTypeTuple>{
-    matchRow(row:string[]):MatchTypeTuple{
-        return [
-            dateStringToDate(row[0]),
-            row[1],
-            row[2],
-            parseInt(row[3]),
-            parseInt(row[4]),
-            row[5] as MatchResults,
-            row[6]
-
-        ];
+export class MatchReader{
+    matches:MatchTypeTuple[]=[]
+    constructor(public reader:DataReader){}
+    load():void{
+        this.reader.read();
+        this.matches=this.reader.data.map((row:string[]):MatchTypeTuple=>{
+            return [
+                dateStringToDate(row[0]),
+                row[1],
+                row[2],
+                parseInt(row[3]),
+                parseInt(row[4]),
+                row[5] as MatchResults,
+                row[6]
+            ];
+        })
     }
+   
 }
