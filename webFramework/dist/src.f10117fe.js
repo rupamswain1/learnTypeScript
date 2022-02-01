@@ -117,9 +117,85 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/index.ts":[function(require,module,exports) {
-console.log('Hello from new project');
-},{}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+})({"src/Models/Users.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.User = void 0;
+
+var User =
+/** @class */
+function () {
+  function User(data) {
+    this.data = data;
+    this.events = {};
+  }
+
+  User.prototype.get = function (propName) {
+    return this.data[propName];
+  };
+
+  User.prototype.set = function (data) {
+    Object.assign(this.data, data);
+  };
+
+  User.prototype.on = function (eventName, callBack) {
+    var handlers = this.events[eventName] || [];
+    handlers.push(callBack);
+    this.events[eventName] = handlers;
+  };
+
+  User.prototype.trigger = function (eventName) {
+    var eventList = this.events[eventName];
+
+    if (!eventList || eventList.length === 0) {
+      return;
+    }
+
+    eventList.forEach(function (callBack) {
+      callBack();
+    });
+  };
+
+  return User;
+}();
+
+exports.User = User;
+},{}],"src/index.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var Users_1 = require("./Models/Users");
+
+var user = new Users_1.User({
+  name: 'rupam',
+  age: 28
+});
+user.set({
+  name: 'rupam swain'
+});
+console.log(user.get('name'));
+console.log(user.get('age'));
+user.on('click', function () {
+  console.log('Click 1');
+});
+user.on('click', function () {
+  console.log('Click 2');
+});
+user.on('change', function () {
+  console.log('Change 1');
+});
+console.log(user);
+user.trigger('click');
+user.trigger('asdasd'); //No output
+
+user.trigger('change');
+},{"./Models/Users":"src/Models/Users.ts"}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -147,7 +223,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36007" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40345" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
