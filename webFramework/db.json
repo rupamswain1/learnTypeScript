@@ -1,0 +1,34 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "typescript",
+      "age": 25
+    },
+    {
+      "name": "rupam",
+      "age": 28,
+      "id": 2
+    },
+    {
+      "name": "test1",
+      "age": 1,
+      "id": 3
+    },
+    {
+      "name": "test1",
+      "age": 1,
+      "id": 4
+    },
+    {
+      "name": "test1",
+      "age": 1,
+      "id": 5
+    },
+    {
+      "name": "test1",
+      "age": 1,
+      "id": 6
+    }
+  ]
+}
