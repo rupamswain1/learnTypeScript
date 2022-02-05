@@ -1,19 +1,11 @@
 import {User} from './Models/Users';
 
-const user=User.buildUser({id:1});
 
-user.on('change',()=>{
-    console.log('user data is changed');
-})
+const collection=User.buildCollection()
 
-user.on('save',()=>{
-    console.log('user is saved');
+collection.on('change',()=>{
+    console.log(collection);
     
 })
-user.fetch();
-setTimeout(()=>{
-    console.log(user.get('name'));
-},1000)
 
-
-
+collection.fetch()
