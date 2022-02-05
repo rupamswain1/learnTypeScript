@@ -129,32 +129,29 @@ var Eventing =
 /** @class */
 function () {
   function Eventing() {
+    var _this = this;
+
     this.events = {};
+
+    this.on = function (eventName, callBack) {
+      var handlers = _this.events[eventName] || [];
+      handlers.push(callBack);
+      _this.events[eventName] = handlers;
+    };
+
+    this.trigger = function (eventName) {
+      var eventList = _this.events[eventName];
+
+      if (!eventList || eventList.length === 0) {
+        return;
+      }
+
+      eventList.forEach(function (callBack) {
+        callBack();
+      });
+    };
   }
 
-  Eventing.prototype.on = function (eventName, callBack) {
-    console.log('on method is called');
-    var handlers = this.events[eventName] || [];
-    handlers.push(callBack);
-    this.events[eventName] = handlers;
-  };
-
-  ;
-
-  Eventing.prototype.trigger = function (eventName) {
-    console.log('trigger is called');
-    var eventList = this.events[eventName];
-
-    if (!eventList || eventList.length === 0) {
-      return;
-    }
-
-    eventList.forEach(function (callBack) {
-      callBack();
-    });
-  };
-
-  ;
   return Eventing;
 }();
 
@@ -2284,27 +2281,162 @@ var Sync =
 /** @class */
 function () {
   function Sync(rootUrl) {
+    var _this = this;
+
     this.rootUrl = rootUrl;
+
+    this.fetch = function (id) {
+      return axios_1.default.get(_this.rootUrl + "/" + id);
+    };
+
+    this.save = function (data) {
+      if (data.id) {
+        return axios_1.default.put(_this.rootUrl + "/" + data.id, data);
+      } else {
+        return axios_1.default.post("" + _this.rootUrl, data);
+      }
+    };
   }
-
-  Sync.prototype.fetch = function (data) {
-    return axios_1.default.get(this.rootUrl + "/" + data.id);
-  };
-
-  Sync.prototype.save = function (data) {
-    if (data.id) {
-      return axios_1.default.put(this.rootUrl + "/" + data.id, data);
-    } else {
-      return axios_1.default.post("" + this.rootUrl, data);
-    }
-  };
 
   return Sync;
 }();
 
 exports.Sync = Sync;
-},{"axios":"node_modules/axios/index.js"}],"src/Models/Users.ts":[function(require,module,exports) {
+},{"axios":"node_modules/axios/index.js"}],"src/Models/Attributes.ts":[function(require,module,exports) {
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Attributes = void 0;
+
+var Attributes =
+/** @class */
+function () {
+  function Attributes(data) {
+    var _this = this;
+
+    this.data = data;
+
+    this.get = function (propName) {
+      return _this.data[propName];
+    };
+  }
+
+  Attributes.prototype.set = function (data) {
+    Object.assign(this.data, data);
+  };
+
+  Attributes.prototype.getAll = function () {
+    return this.data;
+  };
+
+  return Attributes;
+}();
+
+exports.Attributes = Attributes;
+},{}],"src/Models/Models.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Models = void 0;
+
+var Models =
+/** @class */
+function () {
+  function Models(events, sync, attributes) {
+    this.events = events;
+    this.sync = sync;
+    this.attributes = attributes;
+  }
+
+  Object.defineProperty(Models.prototype, "on", {
+    get: function get() {
+      return this.events.on;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Models.prototype, "trigger", {
+    get: function get() {
+      return this.events.trigger;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Models.prototype, "get", {
+    get: function get() {
+      return this.attributes.get;
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  Models.prototype.set = function (update) {
+    this.attributes.set(update);
+    this.events.trigger('change');
+  };
+
+  Models.prototype.fetch = function () {
+    var _this = this;
+
+    var id = this.get('id');
+
+    if (typeof id !== 'number') {
+      throw new Error('Cannor fetch without an ID');
+    }
+
+    this.sync.fetch(id).then(function (response) {
+      _this.set(response.data);
+    });
+  };
+
+  Models.prototype.save = function () {
+    var _this = this;
+
+    this.sync.save(this.attributes.getAll()).then(function (response) {
+      _this.trigger('save');
+    }).catch(function () {
+      _this.trigger('error');
+    });
+  };
+
+  return Models;
+}();
+
+exports.Models = Models;
+},{}],"src/Models/Users.ts":[function(require,module,exports) {
+"use strict";
+
+var __extends = this && this.__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
+      }
+    };
+
+    return _extendStatics(d, b);
+  };
+
+  return function (d, b) {
+    if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+
+    _extendStatics(d, b);
+
+    function __() {
+      this.constructor = d;
+    }
+
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -2315,59 +2447,51 @@ var Eventing_1 = require("./Eventing");
 
 var Sync_1 = require("./Sync");
 
+var Attributes_1 = require("./Attributes");
+
+var Models_1 = require("./Models");
+
 var rootUrl = 'http://localhost:3000/users';
 
 var User =
 /** @class */
-function () {
-  function User(data) {
-    this.data = data;
-    this.events = new Eventing_1.Eventing();
-    this.sync = new Sync_1.Sync(rootUrl);
+function (_super) {
+  __extends(User, _super);
+
+  function User() {
+    return _super !== null && _super.apply(this, arguments) || this;
   }
 
+  User.buildUser = function (attrs) {
+    return new User(new Eventing_1.Eventing(), new Sync_1.Sync(rootUrl), new Attributes_1.Attributes(attrs));
+  };
+
   return User;
-}();
+}(Models_1.Models);
 
 exports.User = User;
-},{"./Eventing":"src/Models/Eventing.ts","./Sync":"src/Models/Sync.ts"}],"src/index.ts":[function(require,module,exports) {
+},{"./Eventing":"src/Models/Eventing.ts","./Sync":"src/Models/Sync.ts","./Attributes":"src/Models/Attributes.ts","./Models":"src/Models/Models.ts"}],"src/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var Users_1 = require("./Models/Users"); //const user=new User({name:'rupam',age:28});
-// user.set({name:'rupam swain'})
-// console.log(user.get('name'));
-// console.log(user.get('age'));
-// user.on('click',()=>{console.log('Click 1');
-// });
-// user.on('click',()=>{console.log('Click 2');
-// });
-// user.on('change',()=>{console.log('Change 1');
-// });
-// console.log(user);
-// user.trigger('click');
-// user.trigger('asdasd');//No output
-// user.trigger('change');
-// // axios.post('http://localhost:3000/users',{
-// //     name:'rupam',
-// //     age:28
-// // })
-// const user=new User({id:1,name:'typescript',age:25});
-// user.save();
-// const secondUser=new User({name:'test1',age:1});
-// secondUser.save();
+var Users_1 = require("./Models/Users");
 
-
-var userForEvent = new Users_1.User({
-  name: 'abc'
+var user = Users_1.User.buildUser({
+  id: 1
 });
-userForEvent.events.on('click', function () {
-  console.log('clicked');
+user.on('change', function () {
+  console.log('user data is changed');
 });
-userForEvent.events.trigger('click');
+user.on('save', function () {
+  console.log('user is saved');
+});
+user.fetch();
+setTimeout(function () {
+  console.log(user.get('name'));
+}, 1000);
 },{"./Models/Users":"src/Models/Users.ts"}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -2396,7 +2520,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43681" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34183" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

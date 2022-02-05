@@ -8,12 +8,12 @@ export class Sync<T extends HasId>{
 
     constructor(public rootUrl:string){}
 
-    fetch(data:T):AxiosPromise{
-       return axios.get(`${this.rootUrl}/${data.id}`)
+    fetch=(id:number):AxiosPromise=>{
+       return axios.get(`${this.rootUrl}/${id}`)
        
     }
 
-    save(data:T):AxiosPromise{
+    save=(data:T):AxiosPromise=>{
         if(data.id){
            return axios.put(`${this.rootUrl}/${data.id}`,data);
         }
