@@ -117,7 +117,75 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/Models/Eventing.ts":[function(require,module,exports) {
+})({"src/views/UserForms.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.UserForms = void 0;
+
+var UserForms =
+/** @class */
+function () {
+  function UserForms(parent, model) {
+    this.parent = parent;
+    this.model = model;
+  }
+
+  UserForms.prototype.eventsMap = function () {
+    return {
+      'mouseenter:h1': this.onHover,
+      'click:.set-age': this.setAge
+    };
+  };
+
+  UserForms.prototype.setAge = function () {
+    console.log('set age is clicked');
+  };
+
+  UserForms.prototype.onHover = function () {
+    console.log('heading hover');
+  };
+
+  UserForms.prototype.onButtonClick = function () {
+    console.log('button clicked');
+  };
+
+  UserForms.prototype.bindEvents = function (fragments) {
+    var eventsMap = this.eventsMap();
+
+    var _loop_1 = function _loop_1(eventKey) {
+      var _a = eventKey.split(':'),
+          eventName = _a[0],
+          selector = _a[1];
+
+      fragments.querySelectorAll(selector).forEach(function (element) {
+        element.addEventListener(eventName, eventsMap[eventKey]);
+      });
+    };
+
+    for (var eventKey in eventsMap) {
+      _loop_1(eventKey);
+    }
+  };
+
+  UserForms.prototype.template = function () {
+    return "\n            <div>\n                <h1>User Form</h1>\n                <div>Name: " + this.model.get('name') + "</div>\n                <div>Age: " + this.model.get('age') + "</div>\n                <input/>\n                <button>Click Me</button>\n                <button class=\"set-age\">Set Age</button>\n            </div>\n        ";
+  };
+
+  UserForms.prototype.render = function () {
+    var templateElement = document.createElement('template');
+    templateElement.innerHTML = this.template();
+    this.bindEvents(templateElement.content);
+    this.parent.append(templateElement.content);
+  };
+
+  return UserForms;
+}();
+
+exports.UserForms = UserForms;
+},{}],"src/Models/Eventing.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2543,14 +2611,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var UserForms_1 = require("./views/UserForms");
+
 var Users_1 = require("./Models/Users");
 
-var collection = Users_1.User.buildCollection();
-collection.on('change', function () {
-  console.log(collection);
+var user = Users_1.User.buildUser({
+  name: 'testing',
+  age: 50
 });
-collection.fetch();
-},{"./Models/Users":"src/Models/Users.ts"}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var userForm = new UserForms_1.UserForms(document.querySelector('#root'), user);
+userForm.render();
+},{"./views/UserForms":"src/views/UserForms.ts","./Models/Users":"src/Models/Users.ts"}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -2578,7 +2649,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42807" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39497" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
