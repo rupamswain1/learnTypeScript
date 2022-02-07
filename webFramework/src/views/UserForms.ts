@@ -1,55 +1,53 @@
-import {User} from '../Models/Users';
+import { Views } from './Views';
+import { User, UserProps } from '../Models/Users';
 
-export class UserForms{
-    constructor(public parent:Element, public model:User){}
+
+export class UserForms extends Views<User,UserProps>{
 
     eventsMap():{[key:string]:()=>void}{
         return{
-            'mouseenter:h1':this.onHover,
             'click:.set-age':this.setAge,
+            'click:.set-name':this.setName,
+            'click:.save-btn':this.saveOnClick
         }
     }
 
-    setAge(){
-        console.log('set age is clicked');
-        
+    saveOnClick=():void=>{
+        this.model.save();
     }
-    onHover(){
-        console.log('heading hover');
+
+    setName=()=>{
+        const input=this.parent.querySelector('input');
+        if(input){
+            const name=input.value;
+            this.model.set({name});
+        }
+
+    }
+    setAge=():void=>{
+       this.model.setRandomAge();
+        
     }
 
     onButtonClick(){
         console.log('button clicked');
     }
 
-    bindEvents(fragments:DocumentFragment):void{
-        const eventsMap=this.eventsMap();
 
-        for(let eventKey in eventsMap){
-            const [eventName,selector]=eventKey.split(':');
-
-            fragments.querySelectorAll(selector).forEach(element=>{
-                element.addEventListener(eventName,eventsMap[eventKey])
-            })
-        }
-    }
     template():string{
         return `
             <div>
-                <h1>User Form</h1>
-                <div>Name: ${this.model.get('name')}</div>
-                <div>Age: ${this.model.get('age')}</div>
-                <input/>
-                <button>Click Me</button>
-                <button class="set-age">Set Age</button>
+                <input placeholder="${this.model.get('name')}"/>
+                <button class="set-name">Update Name</button>
+                <div>
+                    <button class="set-age">Set Random Age</button>
+                </div>
+                <div>
+                    <button class="save-btn">Save</button>
+                </div>
             </div>
         `
     }
 
-    render():void{
-        const templateElement=document.createElement('template');
-        templateElement.innerHTML=this.template();
-        this.bindEvents(templateElement.content)
-        this.parent.append(templateElement.content);
-    }
+   
 }

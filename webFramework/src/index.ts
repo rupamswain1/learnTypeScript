@@ -3,5 +3,9 @@ import { User } from "./Models/Users";
 
 
 const user=User.buildUser({name:'testing',age:50});
-const userForm=new UserForms(document.querySelector('#root'),user);
-userForm.render()
+
+const root=document.querySelector('#root');
+if(root){
+    const userForm=new UserForms(root,user);
+    userForm.render()
+}
