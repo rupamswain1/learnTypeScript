@@ -49,11 +49,6 @@
       "name": "testSaveAgain",
       "age": 10,
       "id": 10
-    },
-    {
-      "name": "form user",
-      "age": 50,
-      "id": 11
     }
   ]
 }

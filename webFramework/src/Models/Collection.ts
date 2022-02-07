@@ -1,5 +1,5 @@
 import { Eventing } from "./Eventing";
-import axios, {AxiosResponse} from 'axios';
+import axios, {Axios, AxiosResponse} from 'axios';
 
 
 export class Collection<T,K>{
@@ -17,13 +17,18 @@ export class Collection<T,K>{
         return this.events.trigger;
     }
 
-    fetch():void{
+    fetch=():void=>{
+      
         axios.get(this.rootUrl)
         .then((response:AxiosResponse)=>{
             response.data.forEach((value:K)=>{
                 this.model.push(this.deserialize(value))
             })
         })
-        this.trigger('change');
+        .then((response)=>{
+            this.trigger('change');
+        })
+       
+        
     }
 }
