@@ -2,5 +2,7 @@ node_modules
 sort_project/node_modules
 StatsProject/node_modules
 webFramework/mode_modules
-webFramework/.chache
+webFramework/.cache
 webFramework/dist
+expressProject1/node_modules
+
