@@ -5,4 +5,5 @@ webFramework/mode_modules
 webFramework/.cache
 webFramework/dist
 expressProject1/node_modules
-
+expressProject2/node_modules
+metadata/node_modules
