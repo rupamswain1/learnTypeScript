@@ -9,22 +9,53 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var routes_1 = require("./decorators/routes");
-var controller_1 = require("./decorators/controller");
+var decorators_1 = require("./decorators");
+function logger(req, res, next) {
+    console.log('request was created');
+    next();
+}
 var LoginController = /** @class */ (function () {
     function LoginController() {
     }
     LoginController.prototype.getLogin = function (req, res) {
         res.send("\n        <form method=\"POST\">\n                <div>\n                    <label>Email<label>\n                    <input type=\"email\" name=\"email\"/>\n                </div>\n                <div>\n                    <label>Password</label>\n                    <input type=\"password\" name=\"password\"/>\n                </div>\n                <div>\n                    <button>Submit</button>\n                </div>\n        </form>\n        ");
     };
+    LoginController.prototype.postLogin = function (req, res) {
+        var _a = req.body, email = _a.email, password = _a.password;
+        if (email === 'test@test.com' && password === 'password') {
+            req.session = { loggedIn: true };
+            res.redirect('/');
+        }
+        else {
+            res.status(401).send('Email or Password Incorrect');
+        }
+    };
+    LoginController.prototype.getLogut = function (req, res) {
+        req.session = undefined;
+        res.redirect('/');
+    };
     __decorate([
-        routes_1.get('/login'),
+        decorators_1.get('/login'),
+        decorators_1.use(logger),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], LoginController.prototype, "getLogin", null);
+    __decorate([
+        decorators_1.post('/login'),
+        decorators_1.bodyValidator('email', 'password'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], LoginController.prototype, "postLogin", null);
+    __decorate([
+        decorators_1.get('/logout'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], LoginController.prototype, "getLogut", null);
     LoginController = __decorate([
-        controller_1.controller('/auth')
+        decorators_1.controller('/auth')
     ], LoginController);
     return LoginController;
 }());

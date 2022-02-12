@@ -3,9 +3,10 @@ import {router} from './routes/loginRoutes';
 import bodyparser from 'body-parser';
 import cookieSession from 'cookie-session';
 
-import {router as controllerRouter} from './controller/decorators/controller';
+import { AppRouter } from './AppRouter';
 
 import './controller/LoginController';
+import './controller/RootController';
 
 const app=express();
 
@@ -15,7 +16,7 @@ app.use(cookieSession({keys:['sessionKey']}));
 
 app.use(router);
 
-app.use(controllerRouter)
+app.use(AppRouter.getInstance())
 
 app.listen(8000,()=>{
     console.log('Listinig on Port 8000');
