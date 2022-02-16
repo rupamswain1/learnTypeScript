@@ -1,15 +1,21 @@
 import React from 'react';
 import { GuestList } from './state/GuestList';
 import UserSearch from './state/UserSearch';
-
+import { EventComponent } from './events/Events';
+import UserSearchUsingRefs from './refs/UserSearchUsingRefs';
 function App() {
   return (
     <div className="App">
       <GuestList/>
-      <div>User Search example</div>
       <br/>
       <hr></hr>
       <UserSearch/>
+      <br/>
+      <hr></hr>
+      <EventComponent/>
+      <br/>
+      <hr></hr>
+      <UserSearchUsingRefs/>
     </div>
   );
 }
