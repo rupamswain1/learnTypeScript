@@ -1,12 +1,10 @@
+import {ActionType} from '../state/action-type';
+import {Action} from './actions';
+
 interface repositoryState{
     loading: boolean;
     error:string|null;
     data:string[]
-}
-
-interface Action{
-    type:string;
-    payload:any
 }
 
 const INITIAL_STATE:repositoryState={
@@ -15,13 +13,16 @@ const INITIAL_STATE:repositoryState={
     data:[]
 }
 
-const reducer=(state:repositoryState=INITIAL_STATE,action:any):repositoryState=>{
+
+
+
+const reducer=(state:repositoryState=INITIAL_STATE,action:Action):repositoryState=>{
     switch(action.type){
-        case 'search_repositories':
+        case ActionType.SEARCH_REPOSITORIES:
             return {...state,loading:true}
-        case 'search_repository_success':
+        case ActionType.SEARCH_REPOSITORIES_SUCCESS:
             return {...state,loading:false,data:action.payload}
-        case 'search_repositories_error':
+        case ActionType.SEARC_REPOSITORIES_ERROR:
             return {...state,loading:false,error:action.payload}
         default:
             return state;
