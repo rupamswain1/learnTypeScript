@@ -5,4 +5,6 @@ const reducer=combineReducers({
     repositories:repositoryReducer,
 });
 
+export type RootState=ReturnType<typeof reducer>
+
 export default reducer;

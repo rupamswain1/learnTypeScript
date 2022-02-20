@@ -4,26 +4,26 @@ import { Dispatch } from 'redux';
 import { SearchRepositories, SearchRepositoriesSuccessAction, SearchRepositoriesErrorAction } from '../actions';
 import {Action} from '../actions'
 
-const searchRepositoryAction=():SearchRepositories=>{
+export const searchRepositoryAction=():SearchRepositories=>{
     return {type:ActionType.SEARCH_REPOSITORIES,}
     
 }
 
-const searchRepositorySuccessAction=(data:string[]):SearchRepositoriesSuccessAction=>{
+export const searchRepositorySuccessAction=(data:string[]):SearchRepositoriesSuccessAction=>{
     return{
         type:ActionType.SEARCH_REPOSITORIES_SUCCESS,
         payload:data
     }
 }
 
-const searchRepositoriesErrorAction=(error:string):SearchRepositoriesErrorAction=>{
+export const searchRepositoriesErrorAction=(error:string):SearchRepositoriesErrorAction=>{
     return{
         type:ActionType.SEARC_REPOSITORIES_ERROR,
         payload:error,
     }
 }
 
-const searchRepository=async (term:string)=>{
+export const searchRepository=(term:string)=>{  
     return async (dispatch:Dispatch<Action>)=>{
         dispatch(searchRepositoryAction());
     
@@ -42,7 +42,7 @@ const searchRepository=async (term:string)=>{
         dispatch(searchRepositorySuccessAction(packageNames))
     }
     catch(err:any){
-        dispatch(searchRepositoriesErrorAction(err));
+        dispatch(searchRepositoriesErrorAction(err.message));
     }
 };
 }

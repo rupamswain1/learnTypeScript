@@ -17,7 +17,7 @@ const INITIAL_STATE:repositoryState={
 
 
 const repositoryReducer=(state:repositoryState=INITIAL_STATE,action:Action):repositoryState=>{
-    switch(action.type){
+      switch(action.type){
         case ActionType.SEARCH_REPOSITORIES:
             return {...state,loading:true}
         case ActionType.SEARCH_REPOSITORIES_SUCCESS:
